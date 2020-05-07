@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://img.icons8.com/doodle/48/000000/man-in-headphones.png">
+    <title>LangLive任務小工具</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/sisyphus.js/1.1.3/sisyphus.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+</head>
+
+<body style="margin: 10px;">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                aria-selected="true">登入</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                aria-selected="false">個人資料</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                aria-selected="false">任務</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about"
+                aria-selected="false">關於</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <p style="color: red;">請選擇使用上方電話簡訊登入，或者是下方token及uid登入!(兩種方法擇一)</p>
+            <h5>電話驗證取得token及uid登入<span class="badge badge-secondary">首次</span></h5>
+            <div class="form-group">
+                <label for="exampleInputEmail1">帳號</label>
+                <input type="phone" class="form-control" id="phone" aria-describedby="emailHelp" placeholder="電話號碼">
+            </div>
+            <div style="text-align: right;"><button class="btn btn-primary" onclick="sendsms();">發送簡訊驗證碼</button></div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">簡訊驗證碼</label>
+                <input type="text" class="form-control" id="passport">
+            </div>
+            <div style="text-align: right;"><button class="btn btn-primary"
+                    onclick="getpassport();">送出取得token及uid</button></div>
+            <hr>
+            <h4>token及uid登入<span class="badge badge-secondary">已有token及uid</span></h4>
+            <div id="remember">
+                <input name="token" type="text" class="form-control" id="langToken" placeholder="your token">
+                <input name="uid" type="text" class="form-control" id="langUid" placeholder="your uid">
+            </div><br>
+            OK到這邊，如果token跟uid都填入了資料，就可以點選上方功能進入使用喔!
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div style="text-align: center;margin-top:10px ;">
+                <button type="button" class="btn btn-primary" onclick="personal();">
+                    我的個人資料取得
+                </button>
+            </div>
+            <br><br>
+            <div id="pd" style="text-align: center;"></div>
+            <br>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div style="text-align: center;margin-top: 10px;">
+                <button type="button" class="btn btn-primary" onclick="taskcenter();">新版任務中心查看</button>
+                <button type="button" class="btn btn-primary" onclick="oldtaskcenter();">舊版任務中心查看</button>
+            </div>
+            <br>
+            <br>
+            <div id="tc"></div>
+        </div>
+        <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
+            <h3>網頁資訊：</h3>
+            <a href="https://github.com/Rob--W/cors-anywhere">cros domain use package(cors-anywhere)</a><br>
+            <a href="https://www.langlive.com.tw/pc/index.html">use LangLive APP內所呼叫之API</a><br>
+            <a href="https://bootstrap.hexschool.com/">bootstrap 4</a><br>
+            <a href="http://sisyphus-js.herokuapp.com/">auto remember user form js</a><br>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <script>
+        $("#remember").sisyphus();
+        var server = "https://localhost:8080/";
+        var taskclick = 0;
+        function taskcenter() {
+            var token = $("#langToken").val();
+            var uid = $("#langUid").val();
+            if (taskclick == 0) {
+                let xml1 = new XMLHttpRequest();
+                xml1.open('POST', server + 'https://langapi.lv-show.com/v3/task_center/list');
+                xml1.setRequestHeader('PLATFORM', 'WEB');
+                xml1.setRequestHeader('LOCALE', 'TW');
+                xml1.setRequestHeader('USER-TOKEN', token);
+                xml1.setRequestHeader('VERSION', '5.0.0.7');
+                xml1.setRequestHeader('API-VERSION', '2.0');
+                xml1.setRequestHeader('USER-UID', uid);
+                xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+                xml1.setRequestHeader('VERSION-CODE', '1280');
+                xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xml1.send();
+                xml1.addEventListener("load", transferComplete);
+                function transferComplete(evt) {
+                    taskclick = 1;
+                    var JDATA = JSON.parse(xml1.responseText);
+                    for (i = 0; i < JDATA.data.general[0].t_list.length; i++) {
+                        if (JDATA.data.general[0].t_list[i].t_state == 1) {
+                            document.getElementById("tc").innerHTML +=
+                                '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
+                                JDATA.data.general[0].t_list[i].t_title + '-' + JDATA.data.general[0].t_list[i].t_des + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
+                                JDATA.data.general[0].t_list[i].t_id + ',' + JDATA.data.general[0].t_list[i].t_type + ');">領取</button></div></div>';
+                        } else {
+                            document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.general[0].t_list[i].t_title + '-\n' + JDATA.data.general[0].t_list[i].t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                        };
+                    }
+                }
+            } else {
+                document.getElementById("tc").innerHTML = "";
+                taskclick = 0;
+                taskcenter();
+            }
+
+        }
+        function personal() {
+            var token = $("#langToken").val();
+            var uid = $("#langUid").val();
+            let xml1 = new XMLHttpRequest();
+            xml1.open('POST', server + 'https://langapi.lv-show.com/v2/passport/refresh_token');
+            xml1.setRequestHeader('PLATFORM', 'WEB');
+            xml1.setRequestHeader('LOCALE', 'TW');
+            xml1.setRequestHeader('USER-TOKEN', token);
+            xml1.setRequestHeader('VERSION', '5.0.0.7');
+            xml1.setRequestHeader('API-VERSION', '2.0');
+            xml1.setRequestHeader('USER-UID', uid);
+            xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+            xml1.setRequestHeader('VERSION-CODE', '1280');
+            xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xml1.send();
+            xml1.addEventListener("load", transferComplete);
+            function transferComplete(evt) {
+                var JDATA = JSON.parse(xml1.responseText);
+                //document.getElementById("pd").innerHTML += JDATA.data.access_token + "<br>";
+                document.getElementById("pd").innerHTML += "<img src='" + JDATA.data.headimg_web + "' style='border-radius:200px' width=100px><br>";
+                document.getElementById("pd").innerHTML += JDATA.data.nickname + "<br>";
+                document.getElementById("pd").innerHTML += JDATA.data.sign + "<br>";
+            }
+        }
+        function receive(id, type) {
+            var token = $("#langToken").val();
+            var uid = $("#langUid").val();
+            let xml1 = new XMLHttpRequest();
+            xml1.open('POST', server + 'https://langapi.lv-show.com/v3/task_center/receive');
+            xml1.setRequestHeader('PLATFORM', 'WEB');
+            xml1.setRequestHeader('LOCALE', 'TW');
+            xml1.setRequestHeader('USER-TOKEN', token);
+            xml1.setRequestHeader('VERSION', '5.0.0.7');
+            xml1.setRequestHeader('API-VERSION', '2.0');
+            xml1.setRequestHeader('USER-UID', uid);
+            xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+            xml1.setRequestHeader('VERSION-CODE', '1280');
+            xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xml1.send("t_id=" + id + "&t_type=" + type);
+            xml1.addEventListener("load", transferComplete);
+            function transferComplete(evt) {
+                var JDATA = JSON.parse(xml1.responseText);
+                alert(JDATA.ret_msg);
+            }
+        }
+        function sendsms() {
+            var id = $("#phone").val();
+            let xml1 = new XMLHttpRequest();
+            xml1.open('POST', server + 'https://langapi.lv-show.com/v2/system/sms_code');
+            xml1.setRequestHeader('PLATFORM', 'WEB');
+            xml1.setRequestHeader('LOCALE', 'TW');
+            xml1.setRequestHeader('USER-TOKEN', '');
+            xml1.setRequestHeader('VERSION', '5.0.0.7');
+            xml1.setRequestHeader('API-VERSION', '2.0');
+            xml1.setRequestHeader('USER-UID', '');
+            xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+            xml1.setRequestHeader('VERSION-CODE', '1280');
+            xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xml1.send("cell=886" + id + "&type=1");
+            xml1.addEventListener("load", transferComplete);
+            function transferComplete(evt) {
+                var JDATA = JSON.parse(xml1.responseText);
+                if (JDATA.ret_msg == "ok") {
+                    alert("簡訊發送成功");
+                }
+            }
+        }
+        function getpassport() {
+            var id = $("#phone").val();
+            var code = $("#passport").val();
+            let xml1 = new XMLHttpRequest();
+            xml1.open('POST', server + 'https://langapi.lv-show.com/v2/passport/mobile');
+            xml1.setRequestHeader('PLATFORM', 'WEB');
+            xml1.setRequestHeader('LOCALE', 'TW');
+            xml1.setRequestHeader('USER-TOKEN', '');
+            xml1.setRequestHeader('VERSION', '5.0.0.7');
+            xml1.setRequestHeader('API-VERSION', '2.0');
+            xml1.setRequestHeader('USER-UID', '');
+            xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+            xml1.setRequestHeader('VERSION-CODE', '1280');
+            xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xml1.send("cell=886" + id + "&token=" + code);
+            xml1.addEventListener("load", transferComplete);
+            function transferComplete(evt) {
+                var JDATA = JSON.parse(xml1.responseText);
+                document.getElementById("langToken").value = JDATA.data.access_token;
+                document.getElementById("langUid").value = JDATA.data.pfid;
+                alert("成功取得 token&uid");
+            }
+        }
+        function oldreceive(id, type) {
+            var token = $("#langToken").val();
+            var uid = $("#langUid").val();
+            let xml1 = new XMLHttpRequest();
+            xml1.open('POST', server + 'https://langapi.lv-show.com/v2/task/receive_sun_task_reward');
+            xml1.setRequestHeader('PLATFORM', 'WEB');
+            xml1.setRequestHeader('LOCALE', 'TW');
+            xml1.setRequestHeader('USER-TOKEN', token);
+            xml1.setRequestHeader('VERSION', '3.5.1.7');
+            xml1.setRequestHeader('API-VERSION', '2.0');
+            xml1.setRequestHeader('USER-UID', uid);
+            xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+            xml1.setRequestHeader('VERSION-CODE', '764');
+            xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xml1.send("task_id=" + id + "&task_type=" + type);
+            xml1.addEventListener("load", transferComplete);
+            function transferComplete(evt) {
+                var JDATA = JSON.parse(xml1.responseText);
+                alert(JDATA.ret_msg);
+            }
+        }
+        function oldtaskcenter() {
+            var token = $("#langToken").val();
+            var uid = $("#langUid").val();
+            if (taskclick == 0) {
+                let xml1 = new XMLHttpRequest();
+                xml1.open('POST', server + 'https://langapi.lv-show.com/v2/task/sun_task_list');
+                xml1.setRequestHeader('PLATFORM', 'WEB');
+                xml1.setRequestHeader('LOCALE', 'TW');
+                xml1.setRequestHeader('USER-TOKEN', token);
+                xml1.setRequestHeader('VERSION', '3.5.1.7');
+                xml1.setRequestHeader('API-VERSION', '2.0');
+                xml1.setRequestHeader('USER-UID', uid);
+                xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
+                xml1.setRequestHeader('VERSION-CODE', '764');
+                xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xml1.send();
+                xml1.addEventListener("load", transferComplete);
+                function transferComplete(evt) {
+                    taskclick = 1;
+                    var JDATA = JSON.parse(xml1.responseText);
+                    for (i = 0; i < JDATA.data.look_live.length; i++) {
+                        if (JDATA.data.look_live[i].status == 2) {
+                            document.getElementById("tc").innerHTML +=
+                                '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
+                                JDATA.data.look_live[i].describe + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
+                                JDATA.data.look_live[i].task_id + ',' + JDATA.data.look_live[i].task_type + ');">領取</button></div></div>';
+                        } else {
+                            if (JDATA.data.look_live[i].status == 1) {
+                                document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.look_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已領取</button></div></div>';
+                            } else {
+                                document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.look_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                            }
+                        };
+                    }
+                    for (i = 0; i < JDATA.data.look_new_anchor_live.length; i++) {
+                        if (JDATA.data.look_new_anchor_live[i].status == 2) {
+                            document.getElementById("tc").innerHTML +=
+                                '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="練習生觀看-' +
+                                JDATA.data.look_new_anchor_live[i].describe + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
+                                JDATA.data.look_new_anchor_live[i].task_id + ',' + JDATA.data.look_new_anchor_live[i].task_type + ');">領取</button></div></div>';
+                        } else {
+                            if (JDATA.data.look_live[i].status == 1) {
+                                document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">練習生觀看-' + JDATA.data.look_new_anchor_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已領取</button></div></div>';
+                            } else {
+                                document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">練習生觀看-' + JDATA.data.look_new_anchor_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                            }
+                        };
+                    }
+                    if (JDATA.data.share_live.status == 2) {
+                        document.getElementById("tc").innerHTML +=
+                            '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
+                            JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
+                            JDATA.data.share_live.task_id + ',' + JDATA.data.share_live.task_type + ');">領取</button></div></div>';
+                    } else {
+                        if (JDATA.data.share_live.status == 1) {
+                            document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">三次都已領取</button></div></div>';
+                        } else {
+                            document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                        }
+                    }
+
+
+                }
+            } else {
+                document.getElementById("tc").innerHTML = "";
+                taskclick = 0;
+                oldtaskcenter();
+            }
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
