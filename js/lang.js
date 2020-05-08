@@ -1,7 +1,7 @@
+var server = "http://localhost:8080/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var server = "http://localhost:8080/";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -44,11 +44,11 @@ function taskcenter() {
             }
             for (i = 0; i < JDATA.data.active.length; i++) {
                 actsum += JDATA.data.active[i].t_current;
-                if(JDATA.data.active[i].t_state==2){
-                    document.getElementById("act"+i).innerHTML="<font color='blue'>已領取</font>";
+                if (JDATA.data.active[i].t_state == 2) {
+                    document.getElementById("act" + i).innerHTML = "<font color='blue'>已領取</font>";
                 }
             }
-            d=JDATA.data.clock;
+            d = JDATA.data.clock;
             if (d.t_state == 1) {
                 tcdiv.innerHTML += '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="整點領取+20金幣(' + d.t_id + '點場)"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
                     d.t_id + ',' + d.t_type + ');">領取</button></div></div>';
@@ -59,20 +59,20 @@ function taskcenter() {
                     tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + d.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
                 }
             }
-            if(actsum >= 100){
-                imgSwitchFin("#yes25","#no25");
-                imgSwitchFin("#yes50","#no50");
-                imgSwitchFin("#yes75","#no75");
-                imgSwitchFin("#yes100","#no100");
-            }else if(actsum >= 75){
-                imgSwitchFin("#yes25","#no25");
-                imgSwitchFin("#yes50","#no50");
-                imgSwitchFin("#yes75","#no75");
-            }else if(actsum >= 50){
-                imgSwitchFin("#yes25","#no25");
-                imgSwitchFin("#yes50","#no50");
-            }else if(actsum >= 25){
-                imgSwitchFin("#yes25","#no25");
+            if (actsum >= 100) {
+                imgSwitchFin("#yes25", "#no25");
+                imgSwitchFin("#yes50", "#no50");
+                imgSwitchFin("#yes75", "#no75");
+                imgSwitchFin("#yes100", "#no100");
+            } else if (actsum >= 75) {
+                imgSwitchFin("#yes25", "#no25");
+                imgSwitchFin("#yes50", "#no50");
+                imgSwitchFin("#yes75", "#no75");
+            } else if (actsum >= 50) {
+                imgSwitchFin("#yes25", "#no25");
+                imgSwitchFin("#yes50", "#no50");
+            } else if (actsum >= 25) {
+                imgSwitchFin("#yes25", "#no25");
             }
             document.getElementById("act").style.width = actsum + "%";
             document.getElementById("act").innerText = actsum + "%";
@@ -282,7 +282,63 @@ function oldtaskcenter() {
         oldtaskcenter();
     }
 }
-function imgSwitchFin(showid,hideid){
+function imgSwitchFin(showid, hideid) {
     $(showid).show();
     $(hideid).hide();
+}
+function oldDailySign() {
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v3/gift/receiveSign');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '3.5.1.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '764');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        var JDATA = JSON.parse(xhr.responseText);
+        if (JDATA.data.rewardList == null) {
+            alert("簽到過了還想簽啊?下個時段再來吧孩子!");
+        } else {
+            var checkinGift = JDATA.data.rewardList[0].name + "*" + JDATA.data.rewardList[0].num;
+            var checkDAY = "你已連續簽到" + JDATA.data.signTimes + "天囉!";
+            alert("今天成功簽到你領取的禮物為:" + checkinGift + checkDAY);
+        }
+    }
+}
+function checkinfo() {
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v3/gift/sign');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '3.5.1.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '764');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        var JDATA = JSON.parse(xhr.responseText);
+        if (JDATA.data.rewardList == null) {
+            document.getElementById("info").innerHTML = "今天簽到過嘞喔!請於下個時段簽到吧!";
+        } else {
+            for (i = 0; i < JDATA.data.rewardList.length; i++) {
+                document.getElementById("info").innerHTML += JDATA.data.rewardList[i].name + "*" + JDATA.data.rewardList[i].num + "<br>";
+            }
+        }
+    }
 }

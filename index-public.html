@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-<!--僅供學術研究參考 lastupdate 20200508-1100 -->
+<!--僅供學術研究參考 lastupdate 20200509-0039 -->
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://img.icons8.com/doodle/48/000000/man-in-headphones.png">
-    <title>LangLive任務小工具</title>
+    <title>Lang任務小工具</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/sisyphus.js/1.1.3/sisyphus.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -15,7 +15,7 @@
 </head>
 
 <body style="margin: 10px;">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                 aria-selected="true">登入</a>
@@ -87,7 +87,9 @@
             </ul>
             <div style="text-align: center;margin-top: 10px;">
                 <button type="button" class="btn btn-primary" onclick="taskcenter();">新版任務中心查看</button>
-                <button type="button" class="btn btn-primary" onclick="oldtaskcenter();">舊版任務中心查看</button>
+                <button type="button" class="btn btn-primary" onclick="oldtaskcenter();">舊版任務中心查看</button><br>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DailyCheckin"
+                    onclick="checkinfo();" style="margin-top: 5px;">簽到</button>
             </div>
             <div class="container" style="margin-top: 20px;margin-bottom: 20px;">
                 <div class="row">
@@ -140,7 +142,24 @@
             </div>
         </div>
     </div>
-    <script src="./js/lang.js"></script>
+    <div class="modal fade" id="DailyCheckin" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">簽到內容</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="info"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-primary" onclick="oldDailySign();">簽下去</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/lang.js?v=5"></script>
 </body>
 
 </html>
