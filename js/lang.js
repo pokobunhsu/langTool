@@ -9,55 +9,73 @@ function taskcenter() {
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
     if (taskclick == 0) {
-        let xml1 = new XMLHttpRequest();
-        xml1.open('POST', server + 'https://langapi.lv-show.com/v3/task_center/list');
-        xml1.setRequestHeader('PLATFORM', 'WEB');
-        xml1.setRequestHeader('LOCALE', 'TW');
-        xml1.setRequestHeader('USER-TOKEN', token);
-        xml1.setRequestHeader('VERSION', '5.0.0.7');
-        xml1.setRequestHeader('API-VERSION', '2.0');
-        xml1.setRequestHeader('USER-UID', uid);
-        xml1.setRequestHeader('DEVICE-ID', devid);
-        xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-        xml1.setRequestHeader('VERSION-CODE', '1280');
-        xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xml1.send();
-        xml1.addEventListener("load", transferComplete);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', server + 'https://langapi.lv-show.com/v3/task_center/list');
+        xhr.setRequestHeader('PLATFORM', 'WEB');
+        xhr.setRequestHeader('LOCALE', 'TW');
+        xhr.setRequestHeader('USER-TOKEN', token);
+        xhr.setRequestHeader('VERSION', '5.0.0.7');
+        xhr.setRequestHeader('API-VERSION', '2.0');
+        xhr.setRequestHeader('USER-UID', uid);
+        xhr.setRequestHeader('DEVICE-ID', devid);
+        xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+        xhr.setRequestHeader('VERSION-CODE', '1280');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+        xhr.addEventListener("load", transferComplete);
+        var tcdiv = document.getElementById("tc");
         function transferComplete(evt) {
             taskclick = 1;
-            var JDATA = JSON.parse(xml1.responseText);
+            var JDATA = JSON.parse(xhr.responseText);
             for (i = 0; i < JDATA.data.general[0].t_list.length; i++) {
-                if (JDATA.data.general[0].t_list[i].t_state == 1) {
-                    document.getElementById("tc").innerHTML +=
+                var d = JDATA.data.general[0].t_list[i];
+                if (d.t_state == 1) {
+                    tcdiv.innerHTML +=
                         '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
-                        JDATA.data.general[0].t_list[i].t_title + '-' + JDATA.data.general[0].t_list[i].t_des + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
-                        JDATA.data.general[0].t_list[i].t_id + ',' + JDATA.data.general[0].t_list[i].t_type + ');">領取</button></div></div>';
+                        d.t_title + '-' + d.t_des + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
+                        d.t_id + ',' + d.t_type + ');">領取</button></div></div>';
                 } else {
-                    if (JDATA.data.general[0].t_list[i].t_state == 2) {
-                        document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.general[0].t_list[i].t_title + '-\n' + JDATA.data.general[0].t_list[i].t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已完成</button></div></div>';
+                    if (d.t_state == 2) {
+                        tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + d.t_title + '-\n' + d.t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已完成</button></div></div>';
                     } else {
-                        document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.general[0].t_list[i].t_title + '-\n' + JDATA.data.general[0].t_list[i].t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                        tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + d.t_title + '-\n' + d.t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
                     }
                 };
             }
             for (i = 0; i < JDATA.data.active.length; i++) {
                 actsum += JDATA.data.active[i].t_current;
             }
-            if (JDATA.data.clock.t_state == 1) {
-                document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="整點領取+20金幣(' + JDATA.data.clock.t_id + '點場)"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
-                    JDATA.data.clock.t_id + ',' + JDATA.data.clock.t_type + ');">領取</button></div></div>';
+            d=JDATA.data.clock;
+            if (d.t_state == 1) {
+                tcdiv.innerHTML += '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="整點領取+20金幣(' + d.t_id + '點場)"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
+                    d.t_id + ',' + d.t_type + ');">領取</button></div></div>';
             } else {
-                if (JDATA.data.clock.t_state == 2) {
-                    document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + JDATA.data.clock.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已完成</button></div></div>';
+                if (d.t_state == 2) {
+                    tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + d.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已完成</button></div></div>';
                 } else {
-                    document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + JDATA.data.clock.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                    tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + d.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
                 }
+            }
+            if(actsum >= 100){
+                imgSwitchFin("#yes25","#no25");
+                imgSwitchFin("#yes50","#no50");
+                imgSwitchFin("#yes75","#no75");
+                imgSwitchFin("#yes100","#no100");
+            }else if(actsum >= 75){
+                imgSwitchFin("#yes25","#no25");
+                imgSwitchFin("#yes50","#no50");
+                imgSwitchFin("#yes75","#no75");
+            }else if(actsum >= 50){
+                imgSwitchFin("#yes25","#no25");
+                imgSwitchFin("#yes50","#no50");
+            }else if(actsum >= 25){
+                imgSwitchFin("#yes25","#no25");
             }
             document.getElementById("act").style.width = actsum + "%";
             document.getElementById("act").innerText = actsum + "%";
             document.getElementById("coin").innerText = JDATA.data.tt_gold;
             document.getElementById("money").innerText = "NT$ " + JDATA.data.tt_money;
-            document.getElementById("time").innerText = Math.floor((JDATA.data.tt_watch / 60));
+            document.getElementById("time").innerText = Math.floor(JDATA.data.tt_watch / 60);
 
         }
     } else {
@@ -68,25 +86,24 @@ function taskcenter() {
 
 }
 function personal() {
-    $("#remember").sisyphus();
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
-    let xml1 = new XMLHttpRequest();
-    xml1.open('POST', server + 'https://langapi.lv-show.com/v2/passport/refresh_token');
-    xml1.setRequestHeader('PLATFORM', 'WEB');
-    xml1.setRequestHeader('LOCALE', 'TW');
-    xml1.setRequestHeader('USER-TOKEN', token);
-    xml1.setRequestHeader('VERSION', '5.0.0.7');
-    xml1.setRequestHeader('API-VERSION', '2.0');
-    xml1.setRequestHeader('USER-UID', uid);
-    xml1.setRequestHeader('DEVICE-ID', devid);
-    xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-    xml1.setRequestHeader('VERSION-CODE', '1280');
-    xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xml1.send();
-    xml1.addEventListener("load", transferComplete);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v2/passport/refresh_token');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
-        var JDATA = JSON.parse(xml1.responseText);
+        var JDATA = JSON.parse(xhr.responseText);
         //document.getElementById("pd").innerHTML += JDATA.data.access_token + "<br>";
         document.getElementById("pd").innerHTML += "<img src='" + JDATA.data.headimg_web + "' style='border-radius:200px' width=100px><br>";
         document.getElementById("pd").innerHTML += JDATA.data.nickname + "<br>";
@@ -96,44 +113,44 @@ function personal() {
 function receive(id, type) {
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
-    let xml1 = new XMLHttpRequest();
-    xml1.open('POST', server + 'https://langapi.lv-show.com/v3/task_center/receive');
-    xml1.setRequestHeader('PLATFORM', 'WEB');
-    xml1.setRequestHeader('LOCALE', 'TW');
-    xml1.setRequestHeader('USER-TOKEN', token);
-    xml1.setRequestHeader('VERSION', '5.0.0.7');
-    xml1.setRequestHeader('API-VERSION', '2.0');
-    xml1.setRequestHeader('USER-UID', uid);
-    xml1.setRequestHeader('DEVICE-ID', devid);
-    xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-    xml1.setRequestHeader('VERSION-CODE', '1280');
-    xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xml1.send("t_id=" + id + "&t_type=" + type);
-    xml1.addEventListener("load", transferComplete);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v3/task_center/receive');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("t_id=" + id + "&t_type=" + type);
+    xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
-        var JDATA = JSON.parse(xml1.responseText);
+        var JDATA = JSON.parse(xhr.responseText);
         alert(JDATA.ret_msg);
         taskcenter();
     }
 }
 function sendsms() {
     var id = $("#phone").val();
-    let xml1 = new XMLHttpRequest();
-    xml1.open('POST', server + 'https://langapi.lv-show.com/v2/system/sms_code');
-    xml1.setRequestHeader('PLATFORM', 'WEB');
-    xml1.setRequestHeader('LOCALE', 'TW');
-    xml1.setRequestHeader('USER-TOKEN', '');
-    xml1.setRequestHeader('VERSION', '5.0.0.7');
-    xml1.setRequestHeader('API-VERSION', '2.0');
-    xml1.setRequestHeader('USER-UID', '');
-    xml1.setRequestHeader('DEVICE-ID', devid);
-    xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-    xml1.setRequestHeader('VERSION-CODE', '1280');
-    xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xml1.send("cell=886" + id + "&type=1");
-    xml1.addEventListener("load", transferComplete);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v2/system/sms_code');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', '');
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', '');
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("cell=886" + id + "&type=1");
+    xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
-        var JDATA = JSON.parse(xml1.responseText);
+        var JDATA = JSON.parse(xhr.responseText);
         if (JDATA.ret_msg == "ok") {
             alert("簡訊發送成功");
         } else {
@@ -144,22 +161,22 @@ function sendsms() {
 function getpassport() {
     var id = $("#phone").val();
     var code = $("#passport").val();
-    let xml1 = new XMLHttpRequest();
-    xml1.open('POST', server + 'https://langapi.lv-show.com/v2/passport/mobile');
-    xml1.setRequestHeader('PLATFORM', 'WEB');
-    xml1.setRequestHeader('LOCALE', 'TW');
-    xml1.setRequestHeader('USER-TOKEN', '');
-    xml1.setRequestHeader('VERSION', '5.0.0.7');
-    xml1.setRequestHeader('API-VERSION', '2.0');
-    xml1.setRequestHeader('USER-UID', '');
-    xml1.setRequestHeader('DEVICE-ID', devid);
-    xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-    xml1.setRequestHeader('VERSION-CODE', '1280');
-    xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xml1.send("cell=886" + id + "&token=" + code);
-    xml1.addEventListener("load", transferComplete);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v2/passport/mobile');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', '');
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', '');
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("cell=886" + id + "&token=" + code);
+    xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
-        var JDATA = JSON.parse(xml1.responseText);
+        var JDATA = JSON.parse(xhr.responseText);
         if (JDATA.ret_code == -1) {
             alert("驗證碼錯誤!請重新輸入或是重新取得簡訊~");
         } else {
@@ -172,22 +189,22 @@ function getpassport() {
 function oldreceive(id, type) {
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
-    let xml1 = new XMLHttpRequest();
-    xml1.open('POST', server + 'https://langapi.lv-show.com/v2/task/receive_sun_task_reward');
-    xml1.setRequestHeader('PLATFORM', 'WEB');
-    xml1.setRequestHeader('LOCALE', 'TW');
-    xml1.setRequestHeader('USER-TOKEN', token);
-    xml1.setRequestHeader('VERSION', '3.5.1.7');
-    xml1.setRequestHeader('API-VERSION', '2.0');
-    xml1.setRequestHeader('USER-UID', uid);
-    xml1.setRequestHeader('DEVICE-ID', devid);
-    xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-    xml1.setRequestHeader('VERSION-CODE', '764');
-    xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xml1.send("task_id=" + id + "&task_type=" + type);
-    xml1.addEventListener("load", transferComplete);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v2/task/receive_sun_task_reward');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '3.5.1.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '764');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("task_id=" + id + "&task_type=" + type);
+    xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
-        var JDATA = JSON.parse(xml1.responseText);
+        var JDATA = JSON.parse(xhr.responseText);
         alert(JDATA.ret_msg);
         oldtaskcenter();
     }
@@ -196,23 +213,23 @@ function oldtaskcenter() {
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
     if (taskclick == 0) {
-        let xml1 = new XMLHttpRequest();
-        xml1.open('POST', server + 'https://langapi.lv-show.com/v2/task/sun_task_list');
-        xml1.setRequestHeader('PLATFORM', 'WEB');
-        xml1.setRequestHeader('LOCALE', 'TW');
-        xml1.setRequestHeader('USER-TOKEN', token);
-        xml1.setRequestHeader('VERSION', '3.5.1.7');
-        xml1.setRequestHeader('API-VERSION', '2.0');
-        xml1.setRequestHeader('USER-UID', uid);
-        xml1.setRequestHeader('DEVICE-ID', devid);
-        xml1.setRequestHeader('USER-MPHONE-OS-VER', '9');
-        xml1.setRequestHeader('VERSION-CODE', '764');
-        xml1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xml1.send();
-        xml1.addEventListener("load", transferComplete);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', server + 'https://langapi.lv-show.com/v2/task/sun_task_list');
+        xhr.setRequestHeader('PLATFORM', 'WEB');
+        xhr.setRequestHeader('LOCALE', 'TW');
+        xhr.setRequestHeader('USER-TOKEN', token);
+        xhr.setRequestHeader('VERSION', '3.5.1.7');
+        xhr.setRequestHeader('API-VERSION', '2.0');
+        xhr.setRequestHeader('USER-UID', uid);
+        xhr.setRequestHeader('DEVICE-ID', devid);
+        xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+        xhr.setRequestHeader('VERSION-CODE', '764');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+        xhr.addEventListener("load", transferComplete);
         function transferComplete(evt) {
             taskclick = 1;
-            var JDATA = JSON.parse(xml1.responseText);
+            var JDATA = JSON.parse(xhr.responseText);
             for (i = 0; i < JDATA.data.look_live.length; i++) {
                 if (JDATA.data.look_live[i].status == 2) {
                     document.getElementById("tc").innerHTML +=
@@ -261,4 +278,8 @@ function oldtaskcenter() {
         taskclick = 0;
         oldtaskcenter();
     }
+}
+function imgSwitchFin(showid,hideid){
+    $(showid).show();
+    $(hideid).hide();
 }
