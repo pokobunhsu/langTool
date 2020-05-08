@@ -44,6 +44,9 @@ function taskcenter() {
             }
             for (i = 0; i < JDATA.data.active.length; i++) {
                 actsum += JDATA.data.active[i].t_current;
+                if(JDATA.data.active[i].t_state==2){
+                    document.getElementById("act"+i).innerHTML="<font color='blue'>已領取</font>";
+                }
             }
             d=JDATA.data.clock;
             if (d.t_state == 1) {

@@ -89,36 +89,43 @@
                 <button type="button" class="btn btn-primary" onclick="taskcenter();">新版任務中心查看</button>
                 <button type="button" class="btn btn-primary" onclick="oldtaskcenter();">舊版任務中心查看</button>
             </div>
-            <div class="container">
+            <div class="container" style="margin-top: 20px;margin-bottom: 20px;">
                 <div class="row">
-                    <div id="act25" class="col" style="text-align: center;" onclick="receive(1,1);">
-                        <img id ="yes25" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px style="display: none;"/>
-                        <img id ="no25" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px  style="display: inline;"/>
+                    <div class="col" style="text-align: center;" onclick="receive(1,1);">
+                        <img id="yes25" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px
+                            style="display: none;" />
+                        <img id="no25" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px
+                            style="display: inline;" />
                         <br>活躍度<br>25
+                        <div id="act0"></div>
                     </div>
-                    <div id="act50" class="col" style="text-align: center;" onclick="receive(2,1);">
-                        <img id ="yes50" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px style="display: none;"/>
-                        <img id ="no50" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px />
+                    <div class="col" style="text-align: center;" onclick="receive(2,1);">
+                        <img id="yes50" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px
+                            style="display: none;" />
+                        <img id="no50" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px />
                         <br>活躍度<br>50
+                        <div id="act1"></div>
                     </div>
-                    <div id="act75" class="col" style="text-align: center;" onclick="receive(3,1);">
-                        <img id ="yes75" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px style="display: none;"/>
-                        <img id ="no75" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px />
+                    <div class="col" style="text-align: center;" onclick="receive(3,1);">
+                        <img id="yes75" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px
+                            style="display: none;" />
+                        <img id="no75" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px />
                         <br>活躍度<br>75
+                        <div id="act2"></div>
                     </div>
-                    <div id="act100" class="col" style="text-align: center;" onclick="receive(4,1);">
-                        <img id ="yes100" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px style="display: none;"/>
-                        <img id ="no100" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px />
+                    <div class="col" style="text-align: center;" onclick="receive(4,1);">
+                        <img id="yes100" src="https://img.icons8.com/bubbles/50/000000/gift.png" width=50px
+                            style="display: none;" />
+                        <img id="no100" src="https://img.icons8.com/dotty/50/000000/filled-cancel.png" width=50px />
                         <br>活躍度<br>100
+                        <div id="act3"></div>
                     </div>
                 </div>
-                <div class="progress">
+                <div class="progress" style="margin-top: 5px;">
                     <div id="act" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="50"
                         aria-valuemax="100"></div>
                 </div>
             </div>
-            <br>
-            <br>
             <div id="tc"></div>
         </div>
         <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
