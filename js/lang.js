@@ -254,7 +254,7 @@ function oldtaskcenter() {
                         JDATA.data.look_new_anchor_live[i].describe + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
                         JDATA.data.look_new_anchor_live[i].task_id + ',' + JDATA.data.look_new_anchor_live[i].task_type + ');">領取</button></div></div>';
                 } else {
-                    if (JDATA.data.look_live[i].status == 1) {
+                    if (JDATA.data.look_new_anchor_live[i].status == 1) {
                         document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">練習生觀看-' + JDATA.data.look_new_anchor_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已領取</button></div></div>';
                     } else {
                         document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">練習生觀看-' + JDATA.data.look_new_anchor_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
