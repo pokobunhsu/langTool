@@ -308,7 +308,13 @@ function oldDailySign() {
         if (JDATA.data.rewardList == null) {
             alert("簽到過了還想簽啊?下個時段再來吧孩子!");
         } else {
-            var checkinGift = JDATA.data.rewardList[0].name + "*" + JDATA.data.rewardList[0].num;
+            var checkinGift = "";
+            for (i = 0; i < JDATA.data.rewardList.length; i++) {
+                checkinGift += JDATA.data.rewardList[i].name + "*" + JDATA.data.rewardList[i].num;
+                if (i != (JDATA.data.rewardList.length - 1)) {
+                    checkinGift += ",";
+                }
+            }
             var checkDAY = "你已連續簽到" + JDATA.data.signTimes + "天囉!";
             alert("今天成功簽到你領取的禮物為:" + checkinGift + checkDAY);
         }
@@ -336,6 +342,7 @@ function checkinfo() {
         if (JDATA.data.rewardList == null) {
             document.getElementById("info").innerHTML = "今天簽到過嘞喔!請於下個時段簽到吧!";
         } else {
+            document.getElementById("info").innerHTML="";
             for (i = 0; i < JDATA.data.rewardList.length; i++) {
                 document.getElementById("info").innerHTML += JDATA.data.rewardList[i].name + "*" + JDATA.data.rewardList[i].num + "<br>";
             }
