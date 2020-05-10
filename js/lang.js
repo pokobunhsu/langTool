@@ -30,16 +30,20 @@ function taskcenter() {
             for (i = 0; i < JDATA.data.general[0].t_list.length; i++) {
                 var d = JDATA.data.general[0].t_list[i];
                 if (d.t_state == 1) {
-                    tcdiv.innerHTML +=
-                        '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
-                        d.t_title + '-' + d.t_des + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
-                        d.t_id + ',' + d.t_type + ');">領取</button></div></div>';
+                    tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">'
+                    +d.t_title+'</h5><small></small>'+'獲得內容'+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +d.t_des+'</p><button type="button" class="btn btn-warning float-right" style="margin-top:-30px" onclick="receive('
+                    +d.t_id + ',' + d.t_type + ');">領取</button></a></div>';
                 } else {
                     if (d.t_state == 2) {
-                        tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + d.t_title + '-\n' + d.t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已完成</button></div></div>';
-                    } else {
-                        tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + d.t_title + '-\n' + d.t_des + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
-                    }
+                        tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">'
+                        +d.t_title+'</h5><small></small>'+'獲得內容'+'</small></div><p style="margin-top: 10px;width:70%">'
+                        +d.t_des+'</p><button type="button" class="btn btn-success float-right" style="margin-top:-30px" disabled="disabled">已完成</button></a></div>';
+                     } else {
+                        tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">'
+                        +d.t_title+'</h5><small></small>'+'獲得內容'+'</small></div><p style="margin-top: 10px;width:70%">'
+                        +d.t_des+'</p><button type="button" class="btn btn-danger float-right" style="margin-top:-30px" disabled="disabled">尚未完成</button></a></div>';
+                     }
                 };
             }
             for (i = 0; i < JDATA.data.active.length; i++) {
@@ -50,13 +54,16 @@ function taskcenter() {
             }
             d = JDATA.data.clock;
             if (d.t_state == 1) {
-                tcdiv.innerHTML += '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="整點領取+20金幣(' + d.t_id + '點場)"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="receive(' +
-                    d.t_id + ',' + d.t_type + ');">領取</button></div></div>';
+                tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">'
+                +"每小時領取"+'</h5><small></small>'+'20金幣'+'</small></div><p style="margin-top: 10px;width:70%">'
+                +'整點領取+20金幣(' + d.t_id + '點場)</p><button type="button" class="btn btn-warning float-right" style="margin-top:-30px" onclick="receive('
+                +d.t_id + ',' + d.t_type + ');">領取</button></a></div>';
             } else {
                 if (d.t_state == 2) {
-                    tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + d.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已完成</button></div></div>';
                 } else {
-                    tcdiv.innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">整點領取+20金幣(' + d.t_id + '點場)</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                    tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">'
+                    +"每小時領取"+'</h5><small></small>'+'20金幣'+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +'整點領取+20金幣(' + d.t_id + '點場)</p><button type="button" class="btn btn-success float-right" style="margin-top:-30px" disabled="disabled">尚未開始</button></a></div>';
                 }
             }
             if (actsum >= 100) {
@@ -133,7 +140,10 @@ function receive(id, type) {
     function transferComplete(evt) {
         var JDATA = JSON.parse(xhr.responseText);
         alert(JDATA.ret_msg);
-        taskcenter();
+        if(JDATA.ret_msg != "您還沒有完成該任務"){
+            taskcenter();
+        }
+        
     }
 }
 function sendsms() {
@@ -233,44 +243,57 @@ function oldtaskcenter() {
         function transferComplete(evt) {
             taskclick = 1;
             var JDATA = JSON.parse(xhr.responseText);
+            var tcdiv = document.getElementById("tc");
             for (i = 0; i < JDATA.data.look_live.length; i++) {
                 if (JDATA.data.look_live[i].status == 2) {
-                    document.getElementById("tc").innerHTML +=
-                        '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
-                        JDATA.data.look_live[i].describe + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
-                        JDATA.data.look_live[i].task_id + ',' + JDATA.data.look_live[i].task_type + ');">領取</button></div></div>';
+                    tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">練習生任務'
+                    +'</h5><small></small>'+JDATA.data.look_live[i].award+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +JDATA.data.look_live[i].describe+'</p><button type="button" class="btn btn-warning float-right" style="margin-top:-30px" onclick="oldreceive('
+                    +JDATA.data.look_live[i].task_id + ',' + JDATA.data.look_live[i].task_type + ');">領取</button></a></div>';
                 } else {
                     if (JDATA.data.look_live[i].status == 1) {
-                        document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.look_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已領取</button></div></div>';
+                        tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">練習生任務'
+                        +'</h5><small></small>'+JDATA.data.look_live[i].award+'</small></div><p style="margin-top: 10px;width:70%">'
+                        +JDATA.data.look_live[i].describe+'</p><button type="button" class="btn btn-success float-right" style="margin-top:-30px" disabled="disabled">已領取</button></a></div>';
                     } else {
-                        document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.look_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                        tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">練習生任務'
+                        +'</h5><small></small>'+JDATA.data.look_live[i].award+'</small></div><p style="margin-top: 10px;width:70%">'
+                        +JDATA.data.look_live[i].describe+'</p><button type="button" class="btn btn-danger float-right" style="margin-top:-30px">尚未完成</button></a></div>';
                     }
                 };
             }
             for (i = 0; i < JDATA.data.look_new_anchor_live.length; i++) {
                 if (JDATA.data.look_new_anchor_live[i].status == 2) {
-                    document.getElementById("tc").innerHTML +=
-                        '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="練習生觀看-' +
-                        JDATA.data.look_new_anchor_live[i].describe + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
-                        JDATA.data.look_new_anchor_live[i].task_id + ',' + JDATA.data.look_new_anchor_live[i].task_type + ');">領取</button></div></div>';
+                    tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">練習生任務'
+                    +'</h5><small></small>'+JDATA.data.look_new_anchor_live[i].award+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +JDATA.data.look_new_anchor_live[i].describe+'</p><button type="button" class="btn btn-warning float-right" style="margin-top:-30px" onclick="oldreceive('
+                    +JDATA.data.look_new_anchor_live[i].task_id + ',' + JDATA.data.look_new_anchor_live[i].task_type + ');">領取</button></a></div>';
                 } else {
                     if (JDATA.data.look_new_anchor_live[i].status == 1) {
-                        document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">練習生觀看-' + JDATA.data.look_new_anchor_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">已領取</button></div></div>';
+                        tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">練習生任務'
+                        +'</h5><small></small>'+JDATA.data.look_new_anchor_live[i].award+'</small></div><p style="margin-top: 10px;width:70%">'
+                        +JDATA.data.look_new_anchor_live[i].describe+'</p><button type="button" class="btn btn-success float-right" style="margin-top:10px" disabled="disabled">已領取</button></a></div>';
                     } else {
-                        document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">練習生觀看-' + JDATA.data.look_new_anchor_live[i].describe + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                        tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">練習生任務'
+                        +'</h5><small></small>'+JDATA.data.look_new_anchor_live[i].award+'</small></div><p style="margin-top: 10px;width:70%">'
+                        +JDATA.data.look_new_anchor_live[i].describe+'</p><button type="button" class="btn btn-danger float-right" style="margin-top:10px">尚未完成</button></a></div>';
                     }
                 };
             }
             if (JDATA.data.share_live.status == 2) {
-                document.getElementById("tc").innerHTML +=
-                    '<div class="input-group mb-3"><input type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2" value="' +
-                    JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" + '"><div class="input-group-append"><button class="btn btn-warning" type="button" onclick="oldreceive(' +
-                    JDATA.data.share_live.task_id + ',' + JDATA.data.share_live.task_type + ');">領取</button></div></div>';
+                tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">分享任務'
+                    +'</h5><small></small>'+JDATA.data.share_live.award+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +JDATA.data.share_live.describe+ "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" +'</p><button type="button" class="btn btn-warning float-right" style="margin-top:-30px" onclick="oldreceive('
+                    +JDATA.data.share_live.task_id + ',' + JDATA.data.share_live.task_type + ');">領取</button></a></div>';
             } else {
                 if (JDATA.data.share_live.status == 1) {
-                    document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">三次都已領取</button></div></div>';
+                    tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">分享任務'
+                    +'</h5><small></small>'+JDATA.data.share_live.award+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +JDATA.data.share_live.describe+ JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" +'</p><button type="button" class="btn btn-success float-right" style="margin-top:-30px" disabled="disabled">三次都已領取</button></a></div>';
                 } else {
-                    document.getElementById("tc").innerHTML += '<div class="input-group mb-3"><textarea type="text" class="form-control" disabled="disabled" aria-describedby="basic-addon2">' + JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" + '</textarea><div class="input-group-append"><button class="btn btn-outline-secondary" type="button">尚未完成</button></div></div>';
+                    tcdiv.innerHTML +='<div class="list-group"><a class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">分享任務'
+                    +'</h5><small></small>'+JDATA.data.share_live.award+'</small></div><p style="margin-top: 10px;width:70%">'
+                    +JDATA.data.share_live.describe+ JDATA.data.share_live.describe + "(" + JDATA.data.share_live.current + "/" + JDATA.data.share_live.length + ")" +'</p><button type="button" class="btn btn-danger float-right" style="margin-top:-30px" disabled="disabled">尚未完成</button></a></div>';
                 }
             }
             document.getElementById("sun").innerText = JDATA.data.user_info.sun;
