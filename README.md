@@ -16,3 +16,6 @@ https://github.com/Rob--W/cors-anywhere
 ----
 ## 特別感謝
 https://github.com/Rob--W/cors-anywhere
+
+npm install http-proxy
+npm install proxy-from-env
