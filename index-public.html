@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-<!--僅供學術研究參考 lastupdate 20200511-0057 -->
+<!--僅供學術研究參考 lastupdate 20200515-0800 -->
 
 <head>
     <meta charset="UTF-8">
@@ -60,6 +60,12 @@
             <div style="text-align: center;margin-top:10px ;">
                 <button type="button" class="btn btn-primary" onclick="personal();">
                     我的個人資料取得
+                </button>
+                <br><br>
+                <input type="text" class="form-control" id="langLiveid" placeholder="輸入直播ID" value="3652550Y05688RK7D">
+                <input type="text" class="form-control" id="langLiveuid" placeholder="輸入主播UID" value="3652550">
+                <button type="button" class="btn btn-primary" onclick="golangWeb($('#langLiveid').val(),$('#langLiveuid').val())">
+                    前往直播間
                 </button>
             </div>
             <br><br>

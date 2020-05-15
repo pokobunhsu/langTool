@@ -372,3 +372,7 @@ function checkinfo() {
         }
     }
 }
+function golangWeb(id,uid){
+    url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id+"&live_uid="+uid;
+    window.open(url);
+}
