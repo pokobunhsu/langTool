@@ -34,6 +34,7 @@
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
+        目前版本為:0515a-01afb4f-withLive
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <p style="color: red;">請選擇使用上方電話簡訊登入，或者是下方token及uid登入!(兩種方法擇一)</p>
             <h5>電話驗證取得token及uid登入<span class="badge badge-secondary">首次</span></h5>
@@ -62,9 +63,59 @@
                     我的個人資料取得
                 </button>
                 <br><br>
-                <input type="text" class="form-control" id="langLiveid" placeholder="輸入直播ID" value="3652550Y05688RK7D">
-                <input type="text" class="form-control" id="langLiveuid" placeholder="輸入主播UID" value="3652550">
-                <button type="button" class="btn btn-primary" onclick="golangWeb($('#langLiveid').val(),$('#langLiveuid').val())">
+                <input type="text" class="form-control" id="langLiveid" placeholder="輸入直播ID">
+                <input type="text" class="form-control" id="langLiveuid" placeholder="輸入主播UID">
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        請選擇成員
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686725")'>曾詩羽</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3652550")'>陳詩雅</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686711")'>劉語晴</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("2028726")'>潘姿怡</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686715")'>劉潔明</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3687493")'>冼迪琦</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686707")'>邱品涵</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4560592")'>國興瑀</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686709")'>張羽翎</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650580")'>林倢</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686708")'>劉曉晴</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686713")'>林于馨</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("1985963")'>李孟純</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650735")'>周佳郁</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3794774")'>藤井麻由</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650741")'>賈宜蓁</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650740")'>柏靈</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650734")'>蔡亞恩</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650589")'>林易沄</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650755")'>林家瑩</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("1398860")'>蔡伊柔</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650590")'>高云珏</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3619520")'>李佳俐</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650583")'>王逸嘉</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3652111")'>張法法</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3795137")'>小山美玲</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650718")'>林潔心</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3793753")'>鄭妤葳</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3800370")'>董子瑄</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3651219")'>李采潔</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650753")'>鄭佳郁</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3650751")'>羅瑞婷</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663724")'>宮田留佳</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663722")'>翁彤薰</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663715")'>吳騏卉</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663738")'>袁子筑</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663721")'>林亭莉</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663718")'>周家安</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4210533")'>吳婉淩</a>
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("4663716")'>林佳霓</a>
+                    </div>
+                </div>
+                <br><br>
+                <button type="button" class="btn btn-primary"
+                    onclick="golangWeb($('#langLiveid').val(),$('#langLiveuid').val())">
                     前往直播間
                 </button>
             </div>
@@ -175,7 +226,7 @@
             </div>
         </div>
     </div>
-    <script src="./js/lang.js?v=7"></script>
+    <script src="./js/lang.js?v=10"></script>
 </body>
 
 </html>
