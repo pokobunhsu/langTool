@@ -1,7 +1,8 @@
-var server = "http://localhost:8080/";
+var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
+var version = "0518a-01afb4f";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -114,8 +115,11 @@ function personal() {
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
         var JDATA = JSON.parse(xhr.responseText);
+        if(JDATA.ret_code==600){
+            alert("會話過期，請重新登入");
+        }
         //document.getElementById("pd").innerHTML += JDATA.data.access_token + "<br>";
-        document.getElementById("pd").innerHTML += "<img src='" + JDATA.data.headimg_web + "' style='border-radius:200px' width=100px><br>";
+        document.getElementById("pd").innerHTML += "<img src='" + JDATA.data.headimg + "' style='border-radius:200px' width=100px><br>";
         document.getElementById("pd").innerHTML += JDATA.data.nickname + "<br>";
         document.getElementById("pd").innerHTML += JDATA.data.sign + "<br>";
     }
@@ -373,6 +377,13 @@ function checkinfo() {
     }
 }
 function golangWeb(id,uid){
+    var url_string = $("#langLiveid").val(); 
+    var url = new URL(url_string);
+    id = url.searchParams.get("live_id");
     url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id+"&live_uid="+uid;
     window.open(url);
+}
+window.onload=function(){
+    this.personal();
+    document.getElementById("ver").innerText=this.version;
 }
