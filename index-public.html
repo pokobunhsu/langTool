@@ -22,7 +22,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                aria-selected="false">個人資料</a>
+                aria-selected="false">個人/直播</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
@@ -34,7 +34,7 @@
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-        目前版本為:0515a-01afb4f-withLive
+        目前版本為:<span id="ver"></span>
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <p style="color: red;">請選擇使用上方電話簡訊登入，或者是下方token及uid登入!(兩種方法擇一)</p>
             <h5>電話驗證取得token及uid登入<span class="badge badge-secondary">首次</span></h5>
@@ -58,24 +58,26 @@
             OK到這邊，如果token跟uid都填入了資料，就可以點選上方功能進入使用喔!
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div style="text-align: center;margin-top:10px ;">
+            <div style="text-align: center;margin-top:10px;">
                 <button type="button" class="btn btn-primary" onclick="personal();">
-                    我的個人資料取得
-                </button>
+                    刷新個人資料
+                </button><br><br>
+                <div id="pd" style="text-align: center;"></div>
                 <br><br>
-                <input type="text" class="form-control" id="langLiveid" placeholder="輸入直播ID">
-                <input type="text" class="form-control" id="langLiveuid" placeholder="輸入主播UID">
+                <input type="text" class="form-control" id="langLiveid" placeholder="請複製主播開播連結">
+                <input type="text" class="form-control" id="langLiveuid" placeholder="主播UID-可使用選擇成員自動帶入">
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         請選擇成員
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3654414")'>AKB48 Team TP 官方帳號</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3686725")'>曾詩羽</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3652550")'>陳詩雅</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3686711")'>劉語晴</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("2028726")'>潘姿怡</a>
-                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686715")'>劉潔明</a>
+                        <!-- <a class="dropdown-item" onclick='$("#langLiveuid").val("3686715")'>劉潔明</a> -->
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3687493")'>冼迪琦</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3686707")'>邱品涵</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("4560592")'>國興瑀</a>
@@ -120,8 +122,7 @@
                 </button>
             </div>
             <br><br>
-            <div id="pd" style="text-align: center;"></div>
-            <br>
+
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <ul class="list-group">
@@ -206,6 +207,11 @@
                 <a href="http://sisyphus-js.herokuapp.com/">auto remember user form js</a><br>
                 <a href="https://www.oxxostudio.tw/articles/201908/js-skill-tips.html">random</a><br>
                 <a href="https://github.com/pokobunhsu/langTool">source code</a><br>
+            </div>
+            <div style="margin: 20px;">
+                <h3>Bug Report：</h3>
+                <a href="https://github.com/pokobunhsu/langTool/issues">github issues</a><br>
+                <a href="mailto:minshanzen@gmail.com?subject=langTool問題回報-">用email回報</a>
             </div>
         </div>
     </div>
