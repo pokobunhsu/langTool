@@ -143,7 +143,7 @@ function receive(id, type) {
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
         var JDATA = JSON.parse(xhr.responseText);
-        alert(JDATA.ret_msg);
+        //alert(JDATA.ret_msg);
         if(JDATA.ret_msg != "您還沒有完成該任務"){
             taskcenter();
         }
@@ -222,7 +222,7 @@ function oldreceive(id, type) {
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
         var JDATA = JSON.parse(xhr.responseText);
-        alert(JDATA.ret_msg);
+        //alert(JDATA.ret_msg);
         oldtaskcenter();
     }
 }
