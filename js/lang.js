@@ -377,11 +377,15 @@ function checkinfo() {
     }
 }
 function golangWeb(id,uid){
-    var url_string = $("#langLiveid").val(); 
-    var url = new URL(url_string);
-    id = url.searchParams.get("live_id");
-    url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
-    window.open(url);
+    try {
+        var url_string = $("#langLiveid").val(); 
+        var url = new URL(url_string);
+        id = url.searchParams.get("live_id");
+        url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
+        window.open(url);
+    } catch (error) {
+        alert("輸入的資訊有誤，請重新輸入");
+    }
 }
 window.onload=function(){
     this.personal();
