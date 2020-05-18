@@ -119,7 +119,7 @@ function personal() {
             alert("會話過期，請重新登入");
         }
         //document.getElementById("pd").innerHTML += JDATA.data.access_token + "<br>";
-        document.getElementById("pd").innerHTML += "<img src='" + JDATA.data.headimg + "' style='border-radius:200px' width=100px><br>";
+        document.getElementById("pd").innerHTML += "<img src='" + JDATA.data.headimg_web + "' style='border-radius:200px' width=100px><br>";
         document.getElementById("pd").innerHTML += JDATA.data.nickname + "<br>";
         document.getElementById("pd").innerHTML += JDATA.data.sign + "<br>";
     }
