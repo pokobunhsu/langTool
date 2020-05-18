@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0518a-01afb4f";
+var version = "0518d-a16720d";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -380,7 +380,7 @@ function golangWeb(id,uid){
     var url_string = $("#langLiveid").val(); 
     var url = new URL(url_string);
     id = url.searchParams.get("live_id");
-    url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id+"&live_uid="+uid;
+    url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
     window.open(url);
 }
 window.onload=function(){
