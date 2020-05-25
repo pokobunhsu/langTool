@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-<!--僅供學術研究參考 lastupdate 20200518-2020 -->
+<!--僅供學術研究參考 lastupdate 20200525-1800-->
 
 <head>
     <meta charset="UTF-8">
@@ -64,11 +64,10 @@
                 </button><br><br>
                 <div id="pd" style="text-align: center;"></div>
                 <br><br>
-                <img src="https://i.imgur.com/QsvHbE3.png" style="width: 100%;">
-                <p style="color: red;">[請直接複製開播連結即可喔!]</p>
-                <input type="text" class="form-control" id="langLiveid" placeholder="請複製主播開播連結">
-                <!-- <input type="text" class="form-control" id="langLiveuid" placeholder="主播UID-可使用選擇成員自動帶入"> -->
-                <!--<div class="dropdown">
+                <!-- <img src="https://i.imgur.com/QsvHbE3.png" style="width: 100%;"> -->
+                <p style="color: red;">[本周更新為輸入主播UID即可前往觀看直播]</p>
+                <input type="text" class="form-control" id="langLiveuid" placeholder="請輸入主播UID">
+                <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         請選擇成員
@@ -116,10 +115,10 @@
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("4210533")'>吳婉淩</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("4663716")'>林佳霓</a>
                     </div>
-                </div>-->
+                </div>
                 <br>
                 <button type="button" class="btn btn-primary"
-                    onclick="golangWeb($('#langLiveid').val(),$('#langLiveuid').val())">
+                    onclick="getliveid();">
                     前往直播間
                 </button>
             </div>
@@ -234,7 +233,7 @@
             </div>
         </div>
     </div>
-    <script src="./js/lang.js?v=12"></script>
+    <script src="./js/lang.js?v=15"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77709295-5"></script>
     <script>

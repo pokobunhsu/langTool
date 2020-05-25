@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0518d-a16720d";
+var version = "0525a-a16720d";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -376,15 +376,47 @@ function checkinfo() {
         }
     }
 }
-function golangWeb(id,uid){
-    try {
-        var url_string = $("#langLiveid").val(); 
-        var url = new URL(url_string);
-        id = url.searchParams.get("live_id");
-        url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
-        window.open(url);
-    } catch (error) {
-        alert("輸入的資訊有誤，請重新輸入");
+// function golangWeb(id,uid){
+//     try {
+//         var url_string = $("#langLiveid").val(); 
+//         var url = new URL(url_string);
+//         id = url.searchParams.get("live_id");
+//         url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
+//         window.open(url);
+//     } catch (error) {
+//         alert("輸入的資訊有誤，請重新輸入");
+//     }
+// }
+function getliveid() {
+    let liver_uid = $("#langLiveuid").val(); 
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v2/user/user_live_info');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(`pfid=${liver_uid}`);
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        var JDATA = JSON.parse(xhr.responseText);
+        if(JDATA.ret_code==600){
+            alert('會話過期，請回到登入頁面重新登入');
+        }else{
+            if(JDATA.data.live_id != ""){
+                url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+JDATA.data.live_id;
+                window.open(url);
+            }else{
+                alert('你輸入的主播還沒有開播喔!');
+            } 
+        }
     }
 }
 window.onload=function(){
