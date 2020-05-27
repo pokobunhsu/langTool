@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-<!--僅供學術研究參考 lastupdate 20200525-1800-->
+<!--僅供學術研究參考 lastupdate 20200527-2300-->
 
 <head>
     <meta charset="UTF-8">
@@ -78,7 +78,7 @@
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3652550")'>陳詩雅</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3686711")'>劉語晴</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("2028726")'>潘姿怡</a>
-                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686715")'>劉潔明</a> 
+                        <a class="dropdown-item" onclick='$("#langLiveuid").val("3686715")'>劉潔明</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3687493")'>冼迪琦</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("3686707")'>邱品涵</a>
                         <a class="dropdown-item" onclick='$("#langLiveuid").val("4560592")'>國興瑀</a>
@@ -117,12 +117,20 @@
                     </div>
                 </div>
                 <br>
-                <button type="button" class="btn btn-primary"
-                    onclick="getliveid();">
+                <button type="button" class="btn btn-primary" onclick="getliveid();">
                     前往直播間
                 </button>
             </div>
-            <br><br>
+            <hr>
+            上小時當紅榜&nbsp;<button type="button" class="btn btn-info" onclick="hourrank('r');">重新整理</button><br>
+            <div id="rank">
+                <!-- <div style="border: solid 0.5px; border-radius: 30px;padding: 10px;margin: 2px;">
+                    <img src=''
+                        width="100px" style="border-radius:30px;padding: 10px;">
+                    人人人
+                    <button type="button" class="btn btn-info">前往直播</button>
+                </div> -->
+            </div>
 
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">

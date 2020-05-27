@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0525a-a16720d";
+var version = "0527a-a16720d";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -419,7 +419,61 @@ function getliveid() {
         }
     }
 }
+function hourrank(option){
+    if(option == "r"){
+        $('#rank').html('');
+    }
+    let liver_uid = $("#langLiveuid").val(); 
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', server + 'https://langapi.lv-show.com/v3/home/hour_rank?type=2&group=3&longitude=&latitude=');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        var JDATA = JSON.parse(xhr.responseText);
+        var top = 0 ;
+        for(i=0;i<JDATA.data.length;i++){
+            for(j=0;j<JDATA.data[i].list.length;j++){
+                try {
+                    if(JDATA.data[i].list[j].jump.li == ""){
+                        var state = "已關播";
+                        top++; 
+                    }else{
+                        var state = "前往直播";
+                        top++;
+                    }
+                    //console.log(JDATA.data[i].list[j]);
+                    $('#rank').html(`${$('#rank').html()}<div style="border: solid 0.5px; border-radius: 30px;padding: 10px;margin: 2px;">
+                    <img src='${JDATA.data[i].list[j].img}'width="100px" style="border-radius:30px;padding: 10px;">
+                    [Top${top}]--${JDATA.data[i].list[j].jump.name}
+                    <button type="button" class="btn btn-info" onclick="goLangWeb('${JDATA.data[i].list[j].jump.li}');">${state}</button></div>`);
+                    //console.log(JDATA.data[i].list[j].jump.name);
+                } catch (error) {}
+            }
+        }
+    }
+}
+function goLangWeb(id){
+    if(id != ""){
+        url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
+        window.open(url);
+    }else{
+        alert("我關播了還按我OAO");
+    }
+}
 window.onload=function(){
     this.personal();
+    hourrank();
     document.getElementById("ver").innerText=this.version;
 }
