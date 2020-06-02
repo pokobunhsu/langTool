@@ -420,9 +420,7 @@ function getliveid() {
     }
 }
 function hourrank(option){
-    if(option == "r"){
-        $('#rank').html('');
-    }
+    $('#refresh_rank').text('更新中...');
     let liver_uid = $("#langLiveuid").val(); 
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
@@ -441,8 +439,12 @@ function hourrank(option){
     xhr.send();
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
+        $('#refresh_rank').text('重新整理(點我再更新一次)');
         var JDATA = JSON.parse(xhr.responseText);
         var top = 0 ;
+        if(option == "r"){
+            $('#rank').html('');
+        }
         for(i=0;i<JDATA.data.length;i++){
             for(j=0;j<JDATA.data[i].list.length;j++){
                 try {
@@ -472,6 +474,31 @@ function goLangWeb(id){
         alert("我關播了還按我OAO");
     }
 }
+function whoslive(){
+    let liver_uid = $("#langLiveuid").val(); 
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://langapi.lv-show.com/v2/friend/follow_list');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send('pfid=1398860&latitude=&page=1&longitude=');
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        JDATA = JSON.parse(xhr.responseText);
+    }
+}
+
+
+
 window.onload=function(){
     this.personal();
     hourrank();
