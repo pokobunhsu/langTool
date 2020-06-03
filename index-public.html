@@ -15,7 +15,42 @@
 </head>
 
 <body style="margin: 10px;">
-    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">langTool</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <!-- <div class="navbar-nav" id="myTab" role="tablist"> -->
+                <ul class="nav nav-tabs nav-fill mr-auto" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">登入</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false">個人</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#live" role="tab"
+                            aria-controls="profile" aria-selected="false">直播</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                            aria-controls="contact" aria-selected="false" onclick="taskcenter();oldtaskcenter();">任務</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab"
+                            aria-controls="about" aria-selected="false">關於</a>
+                    </li>
+                </ul>
+
+                <div>目前版本為:<span id="ver"></span></div>  
+            <!-- </div> -->
+        </div>
+    </nav>
+    <!-- <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                 aria-selected="true">登入</a>
@@ -32,9 +67,8 @@
             <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about"
                 aria-selected="false">關於</a>
         </li>
-    </ul>
+    </ul> -->
     <div class="tab-content" id="myTabContent">
-        目前版本為:<span id="ver"></span>
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <p style="color: red;">請選擇使用上方電話簡訊登入，或者是下方token及uid登入!(兩種方法擇一)</p>
             <h5>電話驗證取得token及uid登入<span class="badge badge-secondary">首次</span></h5>
@@ -122,15 +156,7 @@
                 </button>
             </div>
             <hr>
-            上小時當紅榜&nbsp;<button type="button" class="btn btn-info" id="refresh_rank" onclick="hourrank('r');">重新整理</button><br>
-            <div id="rank">
-                <!-- <div style="border: solid 0.5px; border-radius: 30px;padding: 10px;margin: 2px;">
-                    <img src=''
-                        width="100px" style="border-radius:30px;padding: 10px;">
-                    人人人
-                    <button type="button" class="btn btn-info">前往直播</button>
-                </div> -->
-            </div>
+
 
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
@@ -207,6 +233,53 @@
               </div> -->
             <div id="tc"></div>
         </div>
+        <div class="tab-pane fade show" id="live" role="tabpanel" aria-labelledby="live-tab">
+
+            <div class="row">
+                <div class="col-3">
+                  <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-last-hour" data-toggle="list" href="#list-rank1" role="tab" aria-controls="lashrank1">上小時當紅榜</a>
+                    <a class="list-group-item list-group-item-action" id="ttpmember" data-toggle="list" href="#list-ttpmember" role="tab" aria-controls="ttpmember">TTP正在直播成員</a>
+                  </div>
+                </div>
+                <div class="col-9">
+                  <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-rank1" role="tabpanel" aria-labelledby="list-last-hour">
+                        <div style="background-color: rgb(253, 239, 161);padding: 10px;border-radius: 20px;">
+                            &nbsp;<button type="button" class="btn btn-info" id="refresh_rank" onclick="hourrank('r');">重新整理</button><br>
+                            <div id="rank" style="height: 70vh;overflow-y: scroll;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="list-ttpmember" role="tabpanel" aria-labelledby="ttpmember">
+                        <div style="background-color: rgb(253, 239, 161);padding: 10px;border-radius: 20px;">
+                            &nbsp;<button type="button" class="btn btn-info" id="refresh_rank" onclick="whoslive();">重新整理</button><br>
+                        <div id="ttp_online" style="height: 70vh;overflow-y: scroll;">
+                            <!-- <div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                                <img src=''
+                                    width="100px" style="border-radius:30px;padding: 10px;">
+                                陳詩雅
+                                <div class="text-right">
+                                    <button type="button" class="btn btn-info" style="border-radius: 30px;">前往直播</button>
+                                </div>
+                            </div> -->
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+        </div>
+
+
+
         <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
             <div style="margin: 20px;">
                 <h3>網頁資訊：</h3>

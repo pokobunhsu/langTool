@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0527a-a16720d";
+var version = "0603a-a16720d";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -439,7 +439,7 @@ function hourrank(option){
     xhr.send();
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
-        $('#refresh_rank').text('重新整理(點我再更新一次)');
+        $('#refresh_rank').text('點我重新整理');
         var JDATA = JSON.parse(xhr.responseText);
         var top = 0 ;
         if(option == "r"){
@@ -456,10 +456,17 @@ function hourrank(option){
                         top++;
                     }
                     //console.log(JDATA.data[i].list[j]);
-                    $('#rank').html(`${$('#rank').html()}<div style="border: solid 0.5px; border-radius: 30px;padding: 10px;margin: 2px;">
-                    <img src='${JDATA.data[i].list[j].img}'width="100px" style="border-radius:30px;padding: 10px;">
+                    $('#rank').html(`${$('#rank').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                    <img src='${JDATA.data[i].list[j].img}'
+                        width="100px" style="border-radius:30px;padding: 10px;">
                     [Top${top}]--${JDATA.data[i].list[j].jump.name}
-                    <button type="button" class="btn btn-info" onclick="goLangWeb('${JDATA.data[i].list[j].jump.li}');">${state}</button></div>`);
+                    <div class="text-right">
+                        <button type="button" class="btn btn-info" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data[i].list[j].jump.li}');">${state}</button>
+                    </div>
+                    </div>`);
+                    // $('#rank').html(`${$('#rank').html()}<div style="border: solid 0.5px; border-radius: 30px;padding: 10px;margin: 2px;height:60px;">
+                    // [Top${top}]--${JDATA.data[i].list[j].jump.name}
+                    // <button type="button" class="btn btn-info float-right" onclick="goLangWeb('${JDATA.data[i].list[j].jump.li}');">${state}</button></div>`);
                     //console.log(JDATA.data[i].list[j].jump.name);
                 } catch (error) {}
             }
@@ -475,10 +482,12 @@ function goLangWeb(id){
     }
 }
 function whoslive(){
+    $('#ttp_online').html('');
     let liver_uid = $("#langLiveuid").val(); 
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
     let xhr = new XMLHttpRequest();
+    let xhr2 = new XMLHttpRequest();
     xhr.open('POST', server + 'https://langapi.lv-show.com/v2/friend/follow_list');
     xhr.setRequestHeader('PLATFORM', 'WEB');
     xhr.setRequestHeader('LOCALE', 'TW');
@@ -494,6 +503,60 @@ function whoslive(){
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
         JDATA = JSON.parse(xhr.responseText);
+        for(i=0;i<JDATA.data.list.length;i++){
+                try {
+                    if(JDATA.data.list[i].live_status == 0){
+                        var state = "已關播";
+                        var btn_color = "light";
+                    }else{
+                        var state = "手刀當DD吧";
+                        var btn_color = "warning";
+                    }
+                    $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                    <img src='${JDATA.data.list[i].headimg}'
+                        width="100px" style="border-radius:30px;padding: 10px;">
+                    ${JDATA.data.list[i].nickname}
+                    <div class="text-right">
+                        <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
+                    </div>
+                    </div>`);
+                } catch (error) {}
+        }
+    }
+    xhr2.open('POST', server + 'https://langapi.lv-show.com/v2/friend/follow_list');
+    xhr2.setRequestHeader('PLATFORM', 'WEB');
+    xhr2.setRequestHeader('LOCALE', 'TW');
+    xhr2.setRequestHeader('USER-TOKEN', token);
+    xhr2.setRequestHeader('VERSION', '5.0.0.7');
+    xhr2.setRequestHeader('API-VERSION', '2.0');
+    xhr2.setRequestHeader('USER-UID', uid);
+    xhr2.setRequestHeader('DEVICE-ID', devid);
+    xhr2.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr2.setRequestHeader('VERSION-CODE', '1280');
+    xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr2.send('pfid=1398860&latitude=&page=2&longitude=');
+    xhr2.addEventListener("load", transferComplete2);
+    function transferComplete2(evt) {
+        JDATA = JSON.parse(xhr2.responseText);
+        for(i=0;i<JDATA.data.list.length;i++){
+                try {
+                    if(JDATA.data.list[i].live_status == 0){
+                        var state = "已關播";
+                        var btn_color = "light";
+                    }else{
+                        var state = "手刀當DD吧";
+                        var btn_color = "warning";
+                    }
+                    $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                    <img src='${JDATA.data.list[i].headimg}'
+                        width="100px" style="border-radius:30px;padding: 10px;">
+                    ${JDATA.data.list[i].nickname}
+                    <div class="text-right">
+                        <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
+                    </div>
+                    </div>`);
+                } catch (error) {}
+        }
     }
 }
 
@@ -502,5 +565,6 @@ function whoslive(){
 window.onload=function(){
     this.personal();
     hourrank();
+    whoslive();
     document.getElementById("ver").innerText=this.version;
 }
