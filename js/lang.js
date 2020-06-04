@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0603a-a16720d";
+var version = "0604a-74b8361";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -486,8 +486,11 @@ function whoslive(){
     let liver_uid = $("#langLiveuid").val(); 
     var token = $("#langToken").val();
     var uid = $("#langUid").val();
+    let onlineNum = 0;
+    let times = 0;
     let xhr = new XMLHttpRequest();
     let xhr2 = new XMLHttpRequest();
+    let xhr3 = new XMLHttpRequest();
     xhr.open('POST', server + 'https://langapi.lv-show.com/v2/friend/follow_list');
     xhr.setRequestHeader('PLATFORM', 'WEB');
     xhr.setRequestHeader('LOCALE', 'TW');
@@ -499,7 +502,7 @@ function whoslive(){
     xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
     xhr.setRequestHeader('VERSION-CODE', '1280');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send('pfid=1398860&latitude=&page=1&longitude=');
+    xhr.send('pfid=4373343&latitude=&page=1&longitude=');
     xhr.addEventListener("load", transferComplete);
     function transferComplete(evt) {
         JDATA = JSON.parse(xhr.responseText);
@@ -509,19 +512,20 @@ function whoslive(){
                         var state = "已關播";
                         var btn_color = "light";
                     }else{
+                        onlineNum++;
                         var state = "手刀當DD吧";
                         var btn_color = "warning";
+                        $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                        <img src='${JDATA.data.list[i].headimg}'
+                            width="100px" style="border-radius:30px;padding: 10px;">
+                        ${JDATA.data.list[i].nickname}
+                        <div class="text-right">
+                            <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
+                        </div>
+                        </div>`);
                     }
-                    $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
-                    <img src='${JDATA.data.list[i].headimg}'
-                        width="100px" style="border-radius:30px;padding: 10px;">
-                    ${JDATA.data.list[i].nickname}
-                    <div class="text-right">
-                        <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
-                    </div>
-                    </div>`);
                 } catch (error) {}
-        }
+        }loadok();
     }
     xhr2.open('POST', server + 'https://langapi.lv-show.com/v2/friend/follow_list');
     xhr2.setRequestHeader('PLATFORM', 'WEB');
@@ -534,7 +538,7 @@ function whoslive(){
     xhr2.setRequestHeader('USER-MPHONE-OS-VER', '9');
     xhr2.setRequestHeader('VERSION-CODE', '1280');
     xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr2.send('pfid=1398860&latitude=&page=2&longitude=');
+    xhr2.send('pfid=4373343&latitude=&page=2&longitude=');
     xhr2.addEventListener("load", transferComplete2);
     function transferComplete2(evt) {
         JDATA = JSON.parse(xhr2.responseText);
@@ -544,18 +548,63 @@ function whoslive(){
                         var state = "已關播";
                         var btn_color = "light";
                     }else{
+                        onlineNum++;
                         var state = "手刀當DD吧";
                         var btn_color = "warning";
+                        $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                        <img src='${JDATA.data.list[i].headimg}'
+                            width="100px" style="border-radius:30px;padding: 10px;">
+                        ${JDATA.data.list[i].nickname}
+                        <div class="text-right">
+                            <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
+                        </div>
+                        </div>`);
                     }
-                    $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
-                    <img src='${JDATA.data.list[i].headimg}'
-                        width="100px" style="border-radius:30px;padding: 10px;">
-                    ${JDATA.data.list[i].nickname}
-                    <div class="text-right">
-                        <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
-                    </div>
-                    </div>`);
                 } catch (error) {}
+        }loadok();
+    }
+    xhr3.open('POST', server + 'https://langapi.lv-show.com/v2/friend/follow_list');
+    xhr3.setRequestHeader('PLATFORM', 'WEB');
+    xhr3.setRequestHeader('LOCALE', 'TW');
+    xhr3.setRequestHeader('USER-TOKEN', token);
+    xhr3.setRequestHeader('VERSION', '5.0.0.7');
+    xhr3.setRequestHeader('API-VERSION', '2.0');
+    xhr3.setRequestHeader('USER-UID', uid);
+    xhr3.setRequestHeader('DEVICE-ID', devid);
+    xhr3.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr3.setRequestHeader('VERSION-CODE', '1280');
+    xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr3.send('pfid=4373343&latitude=&page=3&longitude=');
+    xhr3.addEventListener("load", transferComplete3);
+    function transferComplete3(evt) {
+        JDATA = JSON.parse(xhr3.responseText);
+        for(i=0;i<JDATA.data.list.length;i++){
+                try {
+                    if(JDATA.data.list[i].live_status == 0){
+                        var state = "已關播";
+                        var btn_color = "light";
+                    }else{
+                        onlineNum++;
+                        var state = "手刀當DD吧";
+                        var btn_color = "warning";
+                        $('#ttp_online').html(`${$('#ttp_online').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                        <img src='${JDATA.data.list[i].headimg}'
+                            width="100px" style="border-radius:30px;padding: 10px;">
+                        ${JDATA.data.list[i].nickname}
+                        <div class="text-right">
+                            <button type="button" class="btn btn-${btn_color}" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data.list[i].live_id}');">${state}</button>
+                        </div>
+                        </div>`);
+                    }
+                } catch (error) {}
+        }loadok();
+    }
+    function loadok(){
+        times++;
+        if(times == 3){
+            if(onlineNum == 0){
+                $('#ttp_online').html(`都還在休息，晚點在進來看吧!`);
+            }
         }
     }
 }
