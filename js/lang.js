@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0604a-74b8361";
+var version = "0608a-610e6da";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -603,7 +603,7 @@ function whoslive(){
         times++;
         if(times == 3){
             if(onlineNum == 0){
-                $('#ttp_online').html(`都還在休息，晚點在進來看吧!`);
+                $('#ttp_online').html(`都還在休息，晚點再進來看吧!`);
             }
         }
     }
