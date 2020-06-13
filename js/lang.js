@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0608a-610e6da";
+var version = "0614b-610e6da";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -604,6 +604,58 @@ function whoslive(){
         if(times == 3){
             if(onlineNum == 0){
                 $('#ttp_online').html(`都還在休息，晚點再進來看吧!`);
+            }
+        }
+    }
+}
+
+
+function qrLogin(){
+    let serverTime;
+    let token;
+    let uuid;
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', server + 'https://api.kingkongapp.com/webapi/v1/login/create');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('CHANNEL', 'KINGKONG');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        JDATA = JSON.parse(xhr.responseText);
+        console.log(JDATA);
+        uuid = JDATA.data.uuid;
+        token = JDATA.data.token;
+        serverTime = JDATA.data.server_time;
+        $('#qrcode').qrcode(JDATA.data.qrcode_data);
+        times = 0;
+        qrVerify(uuid,serverTime,token);
+    }
+}
+var times = 0;
+function qrVerify(uuid,time,token){
+    if(times >= 5){
+        document.getElementById("qrcode").innerHTML = "";
+        alert("閒置過久，請重新取得QRCODE(動作請於15秒內完成)");
+    }else{
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', server + 'https://api.kingkongapp.com/webapi/v1/login/qrcode/verify');
+        xhr.setRequestHeader('PLATFORM', 'WEB');
+        xhr.setRequestHeader('CHANNEL', 'KINGKONG');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(`uuid=${uuid}&_=${time}&token=${token}`);
+        xhr.addEventListener("load", transferComplete);
+        function transferComplete(evt) {
+            JDATA = JSON.parse(xhr.responseText);
+            console.log(JDATA);
+            if(JDATA.data.access_token != undefined){
+                document.getElementById("qrcode").innerHTML = "";
+                document.getElementById("langToken").value = JDATA.data.access_token;
+                document.getElementById("langUid").value = JDATA.data.uid;
+                alert("成功透過[QRCODE]取得 token&uid");
+            }else{
+                setTimeout(`qrVerify("${uuid}",${time},"${token}")`,3000);
+                times++;
             }
         }
     }
