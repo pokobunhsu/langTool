@@ -2,7 +2,7 @@ var server = "http://localhost:5555/";
 $("#remember").sisyphus({
     timeout: 1
 });
-var version = "0614b-610e6da";
+var version = "0615a-610e6da";
 var taskclick = 0;
 var devid = Math.random().toString(36).substr(2, 678) + Date.now().toString(36).substr(4, 585);
 function taskcenter() {
@@ -473,6 +473,111 @@ function hourrank(option){
         }
     }
 }
+function newLiveRank(option){
+    $('#refresh_rank2').text('更新中...');
+    let liver_uid = $("#langLiveuid").val(); 
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', server + 'https://langapi.lv-show.com/v3/home/hour_rank?type=2&group=2&longitude=&latitude=');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        $('#refresh_rank2').text('點我重新整理');
+        var JDATA = JSON.parse(xhr.responseText);
+        var top = 0 ;
+        if(option == "r"){
+            $('#newlive').html('');
+        }
+        for(i=0;i<JDATA.data.length;i++){
+            for(j=0;j<JDATA.data[i].list.length;j++){
+                try {
+                    if(JDATA.data[i].list[j].jump.li == ""){
+                        var state = "已關播";
+                        top++; 
+                    }else{
+                        var state = "前往直播";
+                        top++;
+                    }
+                    //console.log(JDATA.data[i].list[j]);
+                    $('#newlive').html(`${$('#newlive').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                    <img src='${JDATA.data[i].list[j].img}'
+                        width="100px" style="border-radius:30px;padding: 10px;">
+                    [Top${top}]--${JDATA.data[i].list[j].jump.name}
+                    <div class="text-right">
+                        <button type="button" class="btn btn-info" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data[i].list[j].jump.li}');">${state}</button>
+                    </div>
+                    </div>`);
+                } catch (error) {}
+            }
+        }
+    }
+}
+
+function newShowRank(option){
+    $('#refresh_rank3').text('更新中...');
+    let liver_uid = $("#langLiveuid").val(); 
+    var token = $("#langToken").val();
+    var uid = $("#langUid").val();
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', server + 'https://langapi.lv-show.com/v3/home/hour_rank?type=2&group=1&longitude=&latitude=');
+    xhr.setRequestHeader('PLATFORM', 'WEB');
+    xhr.setRequestHeader('LOCALE', 'TW');
+    xhr.setRequestHeader('USER-TOKEN', token);
+    xhr.setRequestHeader('VERSION', '5.0.0.7');
+    xhr.setRequestHeader('API-VERSION', '2.0');
+    xhr.setRequestHeader('USER-UID', uid);
+    xhr.setRequestHeader('DEVICE-ID', devid);
+    xhr.setRequestHeader('USER-MPHONE-OS-VER', '9');
+    xhr.setRequestHeader('VERSION-CODE', '1280');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    xhr.addEventListener("load", transferComplete);
+    function transferComplete(evt) {
+        $('#refresh_rank3').text('點我重新整理');
+        var JDATA = JSON.parse(xhr.responseText);
+        var top = 0 ;
+        if(option == "r"){
+            $('#newshow').html('');
+        }
+        for(i=0;i<JDATA.data.length;i++){
+            for(j=0;j<JDATA.data[i].list.length;j++){
+                try {
+                    if(JDATA.data[i].list[j].jump.li == ""){
+                        var state = "已關播";
+                        top++; 
+                    }else{
+                        var state = "前往直播";
+                        top++;
+                    }
+                    //console.log(JDATA.data[i].list[j]);
+                    $('#newshow').html(`${$('#newshow').html()}<div style="border-radius: 30px;padding: 10px;margin: 10px;background-color: white;">
+                    <img src='${JDATA.data[i].list[j].img}'
+                        width="100px" style="border-radius:30px;padding: 10px;">
+                    [Top${top}]--${JDATA.data[i].list[j].jump.name}
+                    <div class="text-right">
+                        <button type="button" class="btn btn-info" style="border-radius: 30px;" onclick="goLangWeb('${JDATA.data[i].list[j].jump.li}');">${state}</button>
+                    </div>
+                    </div>`);
+                } catch (error) {
+                    $('#newshow').html("新秀榜每日21:00~00:00開放喔!")
+                }
+            }
+        }
+    }
+}
+
+
 function goLangWeb(id){
     if(id != ""){
         url = "../langWeb/index.html?token="+$("#langToken").val()+"&userid="+$("#langUid").val()+"&live_id="+id;
@@ -666,6 +771,8 @@ function qrVerify(uuid,time,token){
 window.onload=function(){
     this.personal();
     hourrank();
+    newLiveRank();
+    newShowRank();
     whoslive();
     document.getElementById("ver").innerText=this.version;
 }

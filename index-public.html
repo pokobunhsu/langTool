@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-<!--僅供學術研究參考 lastupdate 20200614-0130-->
+<!--僅供學術研究參考 lastupdate 20200614-1900-->
 
 <head>
     <meta charset="UTF-8">
@@ -242,6 +242,8 @@
                 <div class="col-3">
                   <div class="list-group" id="list-tab" role="tablist">
                     <a class="list-group-item list-group-item-action active" id="list-last-hour" data-toggle="list" href="#list-rank1" role="tab" aria-controls="lashrank1">上小時當紅榜</a>
+                    <a class="list-group-item list-group-item-action" id="newliverank" data-toggle="list" href="#list-newliveRank" role="tab" aria-controls="lashrank2">上小時潛力榜</a>
+                    <a class="list-group-item list-group-item-action" id="newshowrank" data-toggle="list" href="#list-newshowRank" role="tab" aria-controls="lashrank3">上小時新秀榜</a>
                     <a class="list-group-item list-group-item-action" id="ttpmember" data-toggle="list" href="#list-ttpmember" role="tab" aria-controls="ttpmember">TTP正在直播成員</a>
                   </div>
                 </div>
@@ -267,6 +269,22 @@
                                     <button type="button" class="btn btn-info" style="border-radius: 30px;">前往直播</button>
                                 </div>
                             </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="list-newliveRank" role="tabpanel" aria-labelledby="newliverank">
+                        <div style="background-color: rgb(253, 239, 161);padding: 10px;border-radius: 20px;">
+                            &nbsp;<button type="button" class="btn btn-info" id="refresh_rank2" onclick="newLiveRank('r');">重新整理</button><br>
+                            <div id="newlive" style="height: 70vh;overflow-y: scroll;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="list-newshowRank" role="tabpanel" aria-labelledby="newshowrank">
+                        <div style="background-color: rgb(253, 239, 161);padding: 10px;border-radius: 20px;">
+                            &nbsp;<button type="button" class="btn btn-info" id="refresh_rank3" onclick="newShowRank('r');">重新整理</button><br>
+                            <div id="newshow" style="height: 70vh;overflow-y: scroll;">
+
                             </div>
                         </div>
                     </div>
